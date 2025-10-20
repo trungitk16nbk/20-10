@@ -122,7 +122,6 @@
             box-shadow: 0 20px 50px rgba(255, 107, 107, 0.8); /* Tăng shadow khi hover */
         }
         
-        /* ... (Giữ nguyên các style khác cho gift box, love-text, gallery, modal) ... */
         .gift-box-icon {
             z-index: 10;
             position: relative;
@@ -383,13 +382,21 @@
         // --- Configuration ---
         const MUSIC_PLAYER = document.getElementById('backgroundMusic');
 
-        /** Function to play music (must be user-initiated) */
+        /** Function to play music. */
         function playMusic() {
             // Chỉ play nếu chưa phát
             if (MUSIC_PLAYER.paused) {
+                MUSIC_PLAYER.currentTime = 0; // Bắt đầu lại từ đầu
                 MUSIC_PLAYER.play().catch(error => {
                     console.error("Không thể tự động phát nhạc:", error);
                 });
+            }
+        }
+        
+        /** Function to stop music. */
+        function stopMusic() {
+            if (!MUSIC_PLAYER.paused) {
+                MUSIC_PLAYER.pause();
             }
         }
         
@@ -425,7 +432,7 @@
                 this.style.animation = 'pulse 0.3s ease-out 3';
             }, 10);
             
-            // 2. Phát nhạc
+            // 2. Phát nhạc 🎶
             playMusic();
             
             // 3. Hiển thị pop-up và mưa trái tim bling
@@ -436,13 +443,15 @@
         /** Closes the pop-up modal. */
         function closeModal() {
             document.getElementById('loveModal').style.display = 'none';
+            // Dừng nhạc khi đóng modal 🛑
+            stopMusic(); 
         }
 
         // Close modal when user clicks anywhere outside of it
         window.onclick = function(event) {
             const modal = document.getElementById('loveModal');
             if (event.target === modal) {
-                closeModal();
+                closeModal(); // Hàm này đã bao gồm dừng nhạc
             }
         }
 
